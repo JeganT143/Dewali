@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E87518"/><stop offset="1" stop-color="#FFE082"/></linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C4601C"/><stop offset="1" stop-color="#4A2209"/></linearGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E58A3A"/><stop offset="1" stop-color="#B9561A"/></linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#211207"/>
+  <!-- Agal vilakku: round bowl with a pinched spout, flame at the spout tip. -->
+  <path d="M6 38 C6 50 18 56 30 56 C42 56 54 50 56 38 Z" fill="url(#b)"/>
+  <path d="M6 38 C6 33 17 30 30 30 C43 30 52 32 55 35 C57 37 53 41 46 44 C40 46 34 46 30 46 C17 46 6 43 6 38 Z" fill="url(#r)" stroke="#FFC928" stroke-opacity=".6" stroke-width=".8"/>
+  <path d="M10 38 C10 35 19 33 30 33 C40 33 47 35 49 37 C47 40 40 42 30 42 C19 42 10 41 10 38 Z" fill="#3B1F0D"/>
+  <path d="M37 40 L49 39" stroke="#F6E7C8" stroke-width="2" stroke-linecap="round"/>
+  <path d="M49 8 C53 15 58 21 57.5 27 C57 32 53.5 35 49 35 C44.5 35 41 32 40.5 27 C40 21 45 15 49 8 Z" fill="url(#f)"/>
+  <path d="M49 21 C51 25 52.5 27.5 52.2 30 C52 32.4 50.8 33.6 49 33.6 C47.2 33.6 46 32.4 45.8 30 C45.5 27.5 47 25 49 21 Z" fill="#FFF5DC"/>
+</svg>

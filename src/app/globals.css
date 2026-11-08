@@ -1,0 +1,379 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-saffron: #e87518;
+  --color-festival: #f28c28;
+  --color-gold: #ffc928;
+  --color-gold-soft: #ffe082;
+  --color-cream: #fff5dc;
+  --color-brown: #3b1f0d;
+  --color-ember: #8a3a0b;
+  --color-night: #211207;
+  --color-night-soft: #2e1a0c;
+
+  --ease-ignite: cubic-bezier(0.22, 1.35, 0.36, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-hind), var(--font-noto-tamil), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), var(--font-noto-tamil), Georgia, serif;
+  --font-tamil: var(--font-noto-tamil), var(--font-cormorant), serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-night);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-brown);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* Tamil needs more vertical room for vowel signs above and below. */
+:lang(ta) {
+  line-height: 1.6;
+}
+
+/* Pause every CSS animation while the tab is hidden (set by usePageVisibility). */
+html[data-page-hidden] *,
+html[data-page-hidden] *::before,
+html[data-page-hidden] *::after {
+  animation-play-state: paused !important;
+}
+
+/* ------------------------------------------------------------------ *
+ * Vilakku
+ * Lit state comes from the nearest data-lit="true" (the lamp's button).
+ * ------------------------------------------------------------------ */
+.vilakku-flame,
+.vilakku-flicker-a,
+.vilakku-flicker-b {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.vilakku-flame {
+  transform: scale(0.15, 0);
+  opacity: 0;
+}
+
+[data-lit="true"] .vilakku-flame {
+  animation: flame-ignite 900ms var(--ease-ignite) forwards;
+}
+
+[data-lit="true"] .vilakku-flicker-a {
+  animation: flicker-a 1.7s ease-in-out 900ms infinite;
+}
+
+[data-lit="true"] .vilakku-flicker-b {
+  animation: flicker-b 2.3s ease-in-out 900ms infinite;
+}
+
+.vilakku-ember {
+  animation: ember-pulse 2.4s ease-in-out infinite;
+}
+
+[data-lit="true"] .vilakku-ember {
+  animation: none;
+  opacity: 0;
+}
+
+.vilakku-glow {
+  opacity: 0.12;
+  transform: scale(0.6);
+  transition:
+    opacity 1400ms var(--ease-out-soft),
+    transform 1400ms var(--ease-out-soft);
+}
+
+[data-lit="true"] .vilakku-glow,
+[data-lit="true"] ~ .vilakku-glow {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-lit="true"] .vilakku-glow-breathe {
+  animation: glow-breathe 3.2s ease-in-out 1.4s infinite;
+}
+
+.vilakku-warmth {
+  opacity: 0;
+  transition: opacity 1200ms ease-out 350ms;
+}
+
+[data-lit="true"] .vilakku-warmth {
+  opacity: 1;
+}
+
+@keyframes flame-ignite {
+  0% {
+    transform: scale(0.15, 0);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(0.35, 0.3);
+    opacity: 0.9;
+  }
+  65% {
+    transform: scale(1.08, 1.14);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes flicker-a {
+  0%,
+  100% {
+    transform: scale(1, 1) skewX(0deg);
+  }
+  22% {
+    transform: scale(0.97, 1.05) skewX(-1.6deg);
+  }
+  47% {
+    transform: scale(1.02, 0.96) skewX(1deg);
+  }
+  71% {
+    transform: scale(0.98, 1.03) skewX(-0.8deg);
+  }
+}
+
+@keyframes flicker-b {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-1.8deg);
+  }
+  64% {
+    transform: rotate(2.2deg);
+  }
+}
+
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes glow-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* Gentle pulse on the "Tap to light" label, inviting the first interaction. */
+.invite {
+  animation: invite 2.6s ease-in-out infinite;
+}
+
+@keyframes invite {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
+/* Spark burst: each spark is rotated to its angle, then flies outward. */
+.spark {
+  animation: spark-fly 950ms var(--ease-out-soft) both;
+}
+
+@keyframes spark-fly {
+  0% {
+    transform: rotate(var(--a)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Scene
+ * ------------------------------------------------------------------ */
+.kolam-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+[data-lit="true"] .kolam-line {
+  animation: kolam-draw 2.4s var(--ease-out-soft) both;
+}
+
+.kolam-dot {
+  opacity: 0.45;
+  transition: opacity 1200ms ease-out;
+}
+
+[data-lit="true"] .kolam-dot {
+  opacity: 1;
+}
+
+@keyframes kolam-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.rays {
+  background: repeating-conic-gradient(from 0deg, rgb(255 201 40 / 0.15) 0deg 5deg, transparent 5deg 15deg);
+  mask-image: radial-gradient(closest-side, black 12%, transparent 100%);
+  animation: rays-rotate 100s linear infinite;
+}
+
+@keyframes rays-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.particle {
+  animation: float-up var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--peak);
+  }
+  80% {
+    opacity: calc(var(--peak) * 0.6);
+  }
+  100% {
+    transform: translate3d(var(--sway), -105vh, 0);
+    opacity: 0;
+  }
+}
+
+/* Marigold petals: one shower per celebration, then they are gone. */
+.petal {
+  animation: petal-fall var(--dur) cubic-bezier(0.35, 0.1, 0.6, 1) var(--delay) both;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(var(--sway), 108vh, 0) rotate(var(--spin));
+    opacity: 0;
+  }
+}
+
+/* Headline brightens as the lamp is lit: light over darkness. */
+.awaits-light {
+  opacity: 0.62;
+  transition: opacity 1600ms var(--ease-out-soft);
+}
+
+[data-scene-lit="true"] .awaits-light {
+  opacity: 1;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 800ms var(--ease-out-soft) both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-reveal {
+  animation: reveal 1100ms var(--ease-out-soft) both;
+}
+
+/* ------------------------------------------------------------------ *
+ * Reduced motion: every animation resolves instantly to its end state,
+ * and purely decorative motion is removed.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+  .particle,
+  .rays,
+  .petal,
+  .invite {
+    animation: none !important;
+  }
+  .petal {
+    display: none;
+  }
+}

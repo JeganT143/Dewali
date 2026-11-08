@@ -1,0 +1,28 @@
+/* Set by <Reveal> after mount. Without JS the attribute never appears. */
+.reveal[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+.reveal[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 900ms var(--ease-out-soft) var(--reveal-delay, 0ms),
+    transform 1100ms var(--ease-out-soft) var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal[data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  .reveal[data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

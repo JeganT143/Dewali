@@ -1,0 +1,62 @@
+/*
+ * Family lamps: the shared Vilakku keyframes (globals.css) ignite each flame;
+ * here the ignition is staggered per lamp via --ignite-delay, and held back
+ * while an enclosing <Reveal> is still waiting to scroll into view.
+ */
+.family-lamps[data-lit] .vilakku-flame {
+  animation-delay: var(--ignite-delay, 0ms);
+}
+
+.family-lamps[data-lit] .vilakku-flicker-a,
+.family-lamps[data-lit] .vilakku-flicker-b {
+  animation-delay: calc(var(--ignite-delay, 0ms) + 900ms);
+}
+
+.family-lamps[data-lit] .vilakku-warmth {
+  transition-delay: calc(var(--ignite-delay, 0ms) + 350ms);
+}
+
+.family-lamp-glow {
+  opacity: 1;
+  transition: opacity 1400ms var(--ease-out-soft) var(--ignite-delay, 0ms);
+}
+
+.family-lamp-glow > span {
+  animation: family-glow 4.2s ease-in-out calc(var(--ignite-delay, 0ms) + 1.2s) infinite;
+}
+
+.family-ground {
+  opacity: 1;
+  transition: opacity 1600ms var(--ease-out-soft) 300ms;
+}
+
+/* Before the section is revealed the lamps wait, unlit. */
+[data-reveal="pending"] .family-lamps .vilakku-flame,
+[data-reveal="pending"] .family-lamps .vilakku-flicker-a,
+[data-reveal="pending"] .family-lamps .vilakku-flicker-b {
+  animation: none;
+}
+
+[data-reveal="pending"] .family-lamps .vilakku-warmth,
+[data-reveal="pending"] .family-lamp-glow,
+[data-reveal="pending"] .family-ground {
+  opacity: 0;
+}
+
+@keyframes family-glow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .family-lamp-glow > span {
+    animation: none;
+  }
+}

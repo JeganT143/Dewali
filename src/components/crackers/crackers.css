@@ -1,0 +1,144 @@
+/* Moment 3 — virtual crackers. Only transform/opacity are animated. */
+
+.crackers-sky {
+  background:
+    radial-gradient(70% 40% at 50% 112%, rgb(232 117 24 / 0.32), transparent 70%),
+    radial-gradient(120% 70% at 50% 0%, #3a1d0c 0%, #1a0d05 58%, #120803 100%);
+  box-shadow: 0 30px 90px -30px rgb(0 0 0 / 0.7);
+}
+
+.crackers-star {
+  opacity: 0.35;
+  box-shadow: 0 0 6px rgb(255 224 130 / 0.8);
+  animation: crackers-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes crackers-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Warm light at the burning point; flickers while lit, static under reduced motion. */
+.crackers-glow {
+  background: radial-gradient(circle, rgb(255 245 220 / 0.95) 0%, rgb(255 201 40 / 0.55) 28%, rgb(232 117 24 / 0) 70%);
+  animation: crackers-flicker 160ms ease-in-out infinite alternate;
+}
+
+@keyframes crackers-flicker {
+  from {
+    opacity: 0.75;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+/* Sparkler: the coating burns down the wire over 4s, and the spray follows it.
+   20.5% = (100 * 0.55) / 220 — how far the coat's top edge travels. */
+.crackers-coat {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+[data-lit="true"] .crackers-coat {
+  animation: crackers-coat-burn 4s linear forwards;
+}
+
+@keyframes crackers-coat-burn {
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+.crackers-burn {
+  animation: crackers-burn-down 4s linear forwards;
+}
+
+@keyframes crackers-burn-down {
+  to {
+    transform: translateY(20.5%);
+  }
+}
+
+.crackers-ray {
+  transform-origin: 50% 100%;
+  opacity: 0;
+  animation: crackers-ray 560ms linear infinite;
+}
+
+@keyframes crackers-ray {
+  0% {
+    transform: rotate(var(--a)) translateY(-3px) scaleY(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* Flower pot: sparks rise, arc outward and fade. */
+.crackers-fount {
+  opacity: 0;
+  animation: crackers-fount 1s cubic-bezier(0.2, 0.7, 0.4, 1) infinite;
+}
+
+@keyframes crackers-fount {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  65% {
+    transform: translate(var(--x1), var(--y1)) scale(0.9);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x2), var(--y2)) scale(0.4);
+    opacity: 0;
+  }
+}
+
+.crackers-message {
+  animation: crackers-pop 420ms var(--ease-ignite) both;
+}
+
+@keyframes crackers-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Reduced motion: no flying sparks, no burn-down; a steady glow shows the cracker is lit. */
+@media (prefers-reduced-motion: reduce) {
+  .crackers-star,
+  .crackers-glow,
+  .crackers-burn,
+  .crackers-message,
+  [data-lit="true"] .crackers-coat {
+    animation: none !important;
+  }
+  .crackers-ray,
+  .crackers-fount {
+    display: none;
+  }
+}

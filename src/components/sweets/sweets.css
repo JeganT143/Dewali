@@ -1,0 +1,83 @@
+/* Moment 2 — sweets. Only transform/opacity are animated. */
+
+.sweets-panel {
+  background:
+    radial-gradient(90% 55% at 50% 0%, rgb(255 255 255 / 0.5), transparent 70%),
+    linear-gradient(180deg, #fff5dc 0%, #ffe082 50%, #f6a23a 100%);
+  box-shadow:
+    0 30px 90px -30px rgb(242 140 40 / 0.55),
+    inset 0 0 0 1px rgb(255 245 220 / 0.7);
+}
+
+/* A polished brass thambalam with an engraved double rim. */
+.sweets-platter {
+  background: radial-gradient(ellipse at 50% 38%, #fcebb4 0%, #f0c661 50%, #cf9029 100%);
+  box-shadow:
+    inset 0 0 0 5px #d99f3a,
+    inset 0 0 0 7px #fff1c2,
+    inset 0 0 0 9px #b5761b,
+    inset 0 -12px 26px rgb(122 58 11 / 0.35),
+    0 18px 32px -14px rgb(59 31 13 / 0.6);
+}
+
+.sweets-chomp {
+  transform-origin: 50% 85%;
+  animation: sweets-chomp 640ms var(--ease-out-soft) both;
+}
+
+@keyframes sweets-chomp {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  16% {
+    transform: scale(0.86, 0.92) rotate(-7deg);
+  }
+  36% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  56% {
+    transform: scale(0.97) rotate(-3deg);
+  }
+  78% {
+    transform: scale(1.02) rotate(1.5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.sweets-bubble {
+  transform-origin: 50% 0%;
+  animation: sweets-pop 420ms var(--ease-ignite) both;
+}
+
+/* The speech-bubble tail, pointing back up at the platter. */
+.sweets-bubble::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@keyframes sweets-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweets-chomp,
+  .sweets-bubble {
+    animation: none !important;
+  }
+}
