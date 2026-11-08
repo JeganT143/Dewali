@@ -11,6 +11,33 @@ import "./sweets.css";
 
 const SWEETS = GREETING.sweets;
 const ITEMS = SWEETS.items;
+/** How many sweets fit on the leaf before we show "+N". */
+const PLATE_MAX = 10;
+
+/** A vazhai ilai (banana leaf), the traditional Tamil plate, drawn behind the sweets. */
+function BananaLeaf() {
+  return (
+    <svg viewBox="0 0 400 140" preserveAspectRatio="none" className="absolute inset-0 size-full" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="sweets-leaf" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7FA83A" />
+          <stop offset="1" stopColor="#4F7A22" />
+        </linearGradient>
+      </defs>
+      <path d="M8 70 C40 10 160 4 300 10 C350 12 386 30 394 70 C386 110 350 128 300 130 C160 136 40 130 8 70 Z" fill="url(#sweets-leaf)" />
+      <path d="M14 70 L390 70" stroke="#C9DB8A" strokeWidth="3" strokeLinecap="round" opacity=".8" />
+      {Array.from({ length: 13 }, (_, k) => {
+        const x = 40 + k * 27;
+        return (
+          <g key={k} stroke="#A9C766" strokeWidth="1.2" opacity=".55" fill="none">
+            <path d={`M${x} 70 Q${x + 10} 40 ${x + 22} 18`} />
+            <path d={`M${x} 70 Q${x + 10} 100 ${x + 22} 122`} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
 
 /**
  * Moment 2: a brass platter of traditional sweets. Tap one to take a bite
@@ -22,16 +49,21 @@ export function SweetsSection() {
   // Per-sweet tap counts: used as keys so the chomp animation replays on every tap.
   const [taps, setTaps] = useState<number[]>(() => ITEMS.map(() => 0));
   const [active, setActive] = useState<number | null>(null);
+  // Every tap adds one sweet to the visitor's plate (indices into ITEMS, in order).
+  const [plate, setPlate] = useState<number[]>([]);
 
   const allTasted = tasted.every(Boolean);
   const totalTaps = taps.reduce((sum, n) => sum + n, 0);
   const current = active === null ? null : ITEMS[active];
-  const announcement = current ? `${current.name}: ${current.message}${allTasted ? ` ${SWEETS.allTasted}` : ""}` : "";
+  const announcement = current
+    ? `${current.name} added. ${SWEETS.plateCount(plate.length)}. ${current.message}${allTasted ? ` ${SWEETS.allTasted}` : ""}`
+    : "";
 
   const taste = (i: number) => {
     setTasted((t) => t.map((v, j) => v || j === i));
     setTaps((t) => t.map((n, j) => (j === i ? n + 1 : n)));
     setActive(i);
+    setPlate((p) => [...p, i]);
   };
 
   return (
@@ -67,7 +99,7 @@ export function SweetsSection() {
               >
                 <span className="relative block w-[clamp(4.25rem,22vw,6.25rem)] transition-transform duration-200 group-hover:-translate-y-1 group-active:scale-95">
                   <span key={taps[i]} className={`block ${taps[i] > 0 ? "sweets-chomp" : ""}`}>
-                    <SweetArt kind={item.id} bitten={tasted[i]} className="block h-auto w-full" />
+                    <SweetArt kind={item.id} className="block h-auto w-full" />
                   </span>
                   {!reducedMotion && taps[i] > 0 && <SparkBurst key={`burst-${taps[i]}`} size="small" x={50} y={40} />}
                 </span>
@@ -82,6 +114,34 @@ export function SweetsSection() {
             </li>
           ))}
         </ul>
+
+        {/* The visitor's own banana-leaf plate, filling up with every tap. */}
+        <div className="mx-auto mt-7 max-w-xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ember">{SWEETS.plateLabel}</p>
+          <div
+            data-testid="sweet-plate"
+            className="relative mx-auto mt-2 flex min-h-[7.5rem] items-center justify-center px-8 py-5 drop-shadow-[0_12px_14px_rgb(59_31_13/0.35)]"
+          >
+            <BananaLeaf />
+            {plate.length === 0 ? (
+              <p className="relative max-w-[16rem] text-pretty text-sm font-semibold text-cream">{SWEETS.plateEmpty}</p>
+            ) : (
+              <ul aria-label={SWEETS.plateCount(plate.length)} className="relative flex max-w-md flex-wrap items-center justify-center gap-1">
+                {plate.slice(0, PLATE_MAX).map((kind, n) => (
+                  <li key={n} data-testid="plate-sweet" className="sweets-drop w-[clamp(2.6rem,11vw,3.25rem)]">
+                    <SweetArt kind={ITEMS[kind].id} className="block h-auto w-full" />
+                  </li>
+                ))}
+                {plate.length > PLATE_MAX && (
+                  <li className="rounded-full bg-cream/90 px-2.5 py-1 text-sm font-bold text-brown">+{plate.length - PLATE_MAX}</li>
+                )}
+              </ul>
+            )}
+          </div>
+          <p className="mt-2 text-sm font-semibold text-brown/80" aria-hidden="true">
+            {plate.length > 0 ? SWEETS.plateCount(plate.length) : "\u00a0"}
+          </p>
+        </div>
 
         {/* Reserved space keeps the platter from jumping when the first message appears. */}
         <div className="mt-6 flex min-h-[7.5rem] items-start justify-center px-1">

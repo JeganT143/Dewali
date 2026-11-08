@@ -81,3 +81,25 @@
     animation: none !important;
   }
 }
+
+/* A sweet dropping onto the banana-leaf plate. */
+.sweets-drop {
+  animation: sweets-drop 520ms var(--ease-ignite) both;
+}
+
+@keyframes sweets-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-36px) scale(0.6) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweets-drop {
+    animation: none;
+  }
+}

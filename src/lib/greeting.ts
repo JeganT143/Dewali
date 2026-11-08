@@ -27,7 +27,10 @@ export const GREETING = {
     eyebrow: "Moment 2",
     heading: "Okay, enough lighting lamps. Where are the sweets?",
     headingTa: "தீபாவளி என்றால் முதலில் ஞாபகம் வருவது இனிப்புதான்!",
-    hint: "Tap a sweet to taste it",
+    hint: "Tap a sweet to add it to your plate",
+    plateLabel: "Your plate",
+    plateEmpty: "Your banana-leaf plate is waiting. Tap a sweet!",
+    plateCount: (n: number) => (n === 1 ? "1 sweet on your plate" : `${n} sweets on your plate`),
     items: [
       { id: "laddu", name: "Laddu", nameTa: "லட்டு", message: "One laddu? That's just the beginning!" },
       { id: "adhirasam", name: "Adhirasam", nameTa: "அதிரசம்", message: "Calories don't count on Deepavali!" },

@@ -91,8 +91,15 @@ test.describe("sweets", () => {
     }
 
     await expect(section.getByText(GREETING.sweets.allTasted)).toHaveCount(0);
+    await expect(page.getByTestId("plate-sweet")).toHaveCount(0);
     await tasteAllSweets(page);
     await expect(section.getByText(GREETING.sweets.allTasted).first()).toBeVisible();
+
+    // Every tap adds that sweet to the visitor's banana-leaf plate.
+    await expect(page.getByTestId("plate-sweet")).toHaveCount(5);
+    await expect(section.getByText("5 sweets on your plate", { exact: true })).toBeVisible();
+    await page.getByTestId("sweet-laddu").click();
+    await expect(page.getByTestId("plate-sweet")).toHaveCount(6);
 
     expect(errors).toEqual([]);
   });
